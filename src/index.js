@@ -24,7 +24,24 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 app.post('/users', (request, response) => {
-  // Complete aqui
+  const { name, username } = request.body
+
+  const userExists = users.find(user => user.username === username)
+
+  if (userExists) {
+    return response.status(400).json({ error: 'Username already exists!' })
+  }
+
+  const newUser ={ 
+    id: uuidv4(),
+    name,
+    username, 
+    todos: []
+  }
+
+  users.push(newUser)
+  
+  return response.status(201).json(newUser)
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
